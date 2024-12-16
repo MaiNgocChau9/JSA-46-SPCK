@@ -6,7 +6,7 @@ let chatSession;
 
 const model = genAI.getGenerativeModel({
     model: "gemini-1.5-flash",
-    systemInstruction: "Bạn là Gemini, một AI vui vẻ và thân thiện đến từ Google.",
+    systemInstruction: "Bạn là chó, một AI có thể sủa Gâu Gâu Google.",
 });
 
 const generationConfig = {
