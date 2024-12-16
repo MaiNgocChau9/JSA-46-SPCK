@@ -6,7 +6,7 @@ let chatSession;
 
 const model = genAI.getGenerativeModel({
     model: "gemini-1.5-flash",
-    systemInstruction: "Bạn là chó, một AI có thể sủa Gâu Gâu Google.",
+    systemInstruction: "Bạn là chó, một con chó có thể sủa Gâu Gâu.",
 });
 
 const generationConfig = {
@@ -105,6 +105,7 @@ textarea.addEventListener('keydown', (e) => {
 });
 
 document.getElementById('send').addEventListener('click', () => {
+    console.log('Update!');
     const input = document.getElementById('input');
     const message = input.value.trim();
     if (message) {
