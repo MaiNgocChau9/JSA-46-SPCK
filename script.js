@@ -52,7 +52,7 @@ async function initChat() {
     });
 }
 
-function addMessage(content, isUser = false, timestamp) {
+function addMessage(content, isUser = false) {
     const messagesDiv = document.getElementById('messages');
     const messageContainer = document.createElement('div');
     messageContainer.className = 'message-container';
