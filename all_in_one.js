@@ -4,9 +4,10 @@ const apiKey = "AIzaSyA6nRUwDozn7hYsRbqGXAtWwm1QU09Umwk";
 const genAI = new GoogleGenerativeAI(apiKey);
 let chatSession;
 let uploadedImage = null;
+let chatHistory = [];
 
 const model = genAI.getGenerativeModel({
-    model: "gemini-1.5-pro",
+    model: "gemini-1.5-flash",
     systemInstruction: `
 # Character
 Bạn là một AI chuyên giới thiệu và hướng dẫn về Trò chơi dân gian Việt Nam.  Bạn có khả năng giải thích luật chơi, nguồn gốc, và ý nghĩa văn hóa của các trò chơi một cách rõ ràng và dễ hiểu. Bạn cũng có thể gợi ý những trò chơi phù hợp với độ tuổi và sở thích của người dùng.
@@ -31,9 +32,10 @@ Bạn là một AI chuyên giới thiệu và hướng dẫn về Trò chơi dâ
 ## Constraints:
 - Chỉ tập trung vào các trò chơi dân gian Việt Nam.
 - Sử dụng ngôn ngữ Việt Nam chính xác và rõ ràng.
+- Luôn luôn kết hợp câu trả lời với emoji để tăng sức truyền đạt.
 - Tránh sử dụng ngôn ngữ khó hiểu hoặc chuyên ngành.
 - Cung cấp thông tin chính xác và đáng tin cậy.
-- Trả lời ngắn gọn, xúc tích và dễ hiểu.
+- Sử dụng markdown để trả lời câu hỏi.
 `,
 });
 
@@ -48,11 +50,11 @@ const generationConfig = {
 async function initChat() {
     chatSession = await model.startChat({
         generationConfig,
-        history: [],
+        history: chatHistory,
     });
 }
 
-function addMessage(content, isUser = false) {
+function addMessage(content, isUser = false, imageBase64 = null) {
     const messagesDiv = document.getElementById('messages');
     const messageContainer = document.createElement('div');
     messageContainer.className = 'message-container';
@@ -74,9 +76,21 @@ function addMessage(content, isUser = false) {
 
     const messageDiv = document.createElement('div');
     messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
-    messageDiv.innerHTML = marked.parse(content);
-    messageContainer.appendChild(messageDiv);
+    
+    // Nếu có hình ảnh, thêm hình ảnh vào tin nhắn
+    if (imageBase64) {
+        const imageElement = document.createElement('img');
+        imageElement.src = `data:image/jpeg;base64,${imageBase64}`;
+        imageElement.className = 'message-image';
+        messageDiv.appendChild(imageElement);
+    }
 
+    // Thêm nội dung văn bản
+    const textElement = document.createElement('div');
+    textElement.innerHTML = marked.parse(content);
+    messageDiv.appendChild(textElement);
+
+    messageContainer.appendChild(messageDiv);
     messagesDiv.appendChild(messageContainer);
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
 }
@@ -85,8 +99,8 @@ async function processImageAndText(message, imageBase64 = null) {
     try {
         if (!chatSession) await initChat();
         
-        const timestamp = new Date().toLocaleString();
-        addMessage(message, true, timestamp);
+        // Thêm tin nhắn người dùng vào UI, bao gồm cả hình ảnh nếu có
+        addMessage(message, true, imageBase64);
         
         // Add typing indicator
         const typingDiv = document.createElement('div');
@@ -98,41 +112,80 @@ async function processImageAndText(message, imageBase64 = null) {
         
         const typingContent = document.createElement('div');
         typingContent.className = 'typing';
-        typingContent.innerHTML = 'Typing<span class="typing-dots"></span>';
+        typingContent.innerHTML = '<span class="typing-dots"></span>';
         typingDiv.appendChild(typingContent);
         
         document.getElementById('messages').appendChild(typingDiv);
 
         let result;
+        let response;
+        
         if (imageBase64) {
-            // If there's an image, process both image and text
+            // Nếu có hình ảnh, xử lý cả hình ảnh và văn bản
             result = await model.generateContent([
                 message || "Tell me about this image (in Vietnamese)",
                 {
                     inlineData: {
                         data: imageBase64,
-                        mimeType: 'image/jpeg', // Adjust based on actual image type
+                        mimeType: 'image/jpeg', // Điều chỉnh dựa trên loại hình ảnh thực tế
                     },
                 }
             ]);
-            const response = result.response.candidates[0].content.parts[0].text;
-            typingDiv.remove();
-            addMessage(response, false, timestamp);
+            response = result.response.candidates[0].content.parts[0].text;
         } else {
-            // Text-only processing
+            // Xử lý văn bản thuần túy
             result = await chatSession.sendMessage(message);
-            const response = result.response.text();
-            typingDiv.remove();
-            addMessage(response, false, timestamp);
+            response = result.response.text();
         }
 
-        // Clear the uploaded image after processing
+        // Xóa indicator chờ
+        typingDiv.remove();
+
+        // Thêm phản hồi AI vào UI
+        addMessage(response, false);
+
+        // Cập nhật lịch sử chat
+        chatHistory.push({
+            role: 'user',
+            parts: [{ text: message }]
+        });
+        
+        if (imageBase64) {
+            // Đối với tương tác dựa trên hình ảnh, thêm một mục lịch sử khác
+            chatHistory.push({
+                role: 'user',
+                parts: [
+                    { text: message },
+                    { 
+                        inlineData: {
+                            mimeType: 'image/jpeg',
+                            data: imageBase64
+                        }
+                    }
+                ]
+            });
+        }
+
+        chatHistory.push({
+            role: 'model',
+            parts: [{ text: response }]
+        });
+
+        // Khởi tạo lại phiên chat với lịch sử đã cập nhật
+        await initChat();
+
+        // Xóa preview hình ảnh và reset nút gửi
+        const imagePreviewContainer = document.querySelector('.image-preview-container');
+        if (imagePreviewContainer) {
+            imagePreviewContainer.remove();
+        }
         uploadedImage = null;
+        document.getElementById('send').disabled = true;
         
     } catch (error) {
         console.error('Error:', error);
         typingDiv?.remove();
-        addMessage('Sorry, there was an error processing your message.');
+        addMessage('Xin lỗi, đã có lỗi xảy ra khi xử lý tin nhắn của bạn.', false);
     }
 }
 
@@ -152,6 +205,36 @@ imageUpload.addEventListener('change', async (e) => {
             const reader = new FileReader();
             reader.onload = async () => {
                 uploadedImage = reader.result.split(',')[1];
+
+                // Hiển thị hình ảnh preview
+                const imagePreviewContainer = document.createElement('div');
+                imagePreviewContainer.className = 'image-preview-container';
+                const imagePreview = document.createElement('img');
+                imagePreview.src = reader.result;
+                imagePreview.className = 'image-preview';
+                
+                const removeBtn = document.createElement('button');
+                removeBtn.innerHTML = '&times;';
+                removeBtn.className = 'remove-image-btn';
+                removeBtn.addEventListener('click', () => {
+                    uploadedImage = null;
+                    imagePreviewContainer.remove();
+                    document.getElementById('send').disabled = true;
+                });
+
+                imagePreviewContainer.appendChild(imagePreview);
+                imagePreviewContainer.appendChild(removeBtn);
+
+                const existingPreview = document.querySelector('.image-preview-container');
+                if (existingPreview) {
+                    existingPreview.remove();
+                }
+                
+                const inputWrapper = document.querySelector('.input-wrapper');
+                inputWrapper.insertBefore(imagePreviewContainer, inputWrapper.firstChild);
+
+                // Kích hoạt nút gửi
+                document.getElementById('send').disabled = false;
             };
             reader.readAsDataURL(file);
             imageUpload.value = '';
@@ -169,6 +252,10 @@ textarea.addEventListener('input', function() {
 textarea.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
+        const existingPreview = document.querySelector('.image-preview-container');
+        if (existingPreview) {
+            existingPreview.remove();
+        }
         const message = e.target.value.trim();
         if (message || uploadedImage) {
             processImageAndText(message, uploadedImage);
@@ -179,6 +266,10 @@ textarea.addEventListener('keydown', (e) => {
 });
 
 document.getElementById('send').addEventListener('click', () => {
+    const existingPreview = document.querySelector('.image-preview-container');
+    if (existingPreview) {
+        existingPreview.remove();
+    }
     const input = document.getElementById('input');
     const message = input.value.trim();
     if (message || uploadedImage) {
