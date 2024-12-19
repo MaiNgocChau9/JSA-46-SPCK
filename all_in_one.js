@@ -363,7 +363,7 @@ function createSuggestionsUI() {
     const style = document.createElement('style');
     style.textContent = `
         .welcome {
-            margin-bottom: 2rem;
+            margin-top: 2rem;
             padding: 2rem 1rem;
         }
         
