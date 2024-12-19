@@ -265,7 +265,8 @@ textarea.addEventListener('keydown', (e) => {
     }
 });
 
-document.getElementById('send').addEventListener('click', () => {
+document.getElementById('send').addEventListener('click', (e) => {
+    e.preventDefault(); // Ngăn chặn reload trang
     const existingPreview = document.querySelector('.image-preview-container');
     if (existingPreview) {
         existingPreview.remove();
@@ -278,5 +279,6 @@ document.getElementById('send').addEventListener('click', () => {
         input.style.height = 'auto';
     }
 });
+
 
 initChat();
