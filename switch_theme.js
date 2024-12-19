@@ -1,18 +1,17 @@
-// Thêm vào đầu file
+// Theme handling logic
 const themeToggle = document.getElementById('themeToggle');
 const themeIcon = themeToggle.querySelector('i');
 
-// Kiểm tra theme đã lưu
+// Load saved theme
 const savedTheme = localStorage.getItem('theme') || 'light';
 document.body.classList.add(`${savedTheme}-mode`);
 updateThemeIcon();
 
-// Xử lý chuyển đổi theme
+// Theme toggle handler
 themeToggle.addEventListener('click', () => {
     document.body.classList.toggle('dark-mode');
     document.body.classList.toggle('light-mode');
     
-    // Lưu theme vào localStorage
     const currentTheme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
     localStorage.setItem('theme', currentTheme);
     
@@ -24,7 +23,7 @@ function updateThemeIcon() {
     themeIcon.className = isDark ? 'fas fa-moon' : 'fas fa-sun';
 }
 
-// Thêm vào cuối file để kích hoạt/vô hiệu hóa nút gửi
+// Input field handler
 const inputField = document.getElementById('input');
 const sendButton = document.getElementById('send');
 

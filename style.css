@@ -47,7 +47,7 @@ body.dark-mode {
 .theme-toggle {
     position: absolute;
     top: 1rem;
-    right: 1rem;
+    left: 1rem;
     padding: 0.5rem;
     border-radius: 50%;
     border: none;
@@ -74,7 +74,7 @@ body.dark-mode {
     flex: 1;
     overflow-y: auto;
     padding: 1.5rem;
-    padding-top: 4rem;
+    padding-top: 2rem;
 }
 
 /* Message Container */
@@ -345,4 +345,10 @@ textarea::placeholder {
     display: flex;
     flex-direction: column;
     gap: 5px;
+}
+
+@media screen and (max-width: 600px) {
+    .avatar {
+        display: none;
+    }
 }
