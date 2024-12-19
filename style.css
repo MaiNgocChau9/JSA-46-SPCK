@@ -143,6 +143,9 @@ body.dark-mode {
     padding: 1rem;
     border-top: 1px solid var(--light-border);
     background: var(--light-secondary-bg);
+    position: fixed;
+    bottom: 0;
+    width: 100%;
 }
 
 .dark-mode .input-area {
