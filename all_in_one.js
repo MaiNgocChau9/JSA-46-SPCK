@@ -467,5 +467,3 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 initChat();
-
-console.log('Updated!');
