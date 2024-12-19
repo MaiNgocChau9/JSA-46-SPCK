@@ -331,9 +331,10 @@ function createSuggestionsUI() {
     suggestionsGrid.className = 'suggestions-grid';
     
     // Add suggestion cards
-    suggestions.forEach(suggestion => {
+    suggestions.forEach((suggestion, index) => {
         const card = document.createElement('div');
         card.className = 'suggestion-card';
+        card.setAttribute('data-index', index); // Để xác định vị trí phần tử
         card.innerHTML = `
             <div class="card-content">${suggestion.title}</div>
             <div class="suggestion-preview">${suggestion.content}</div>
@@ -363,7 +364,6 @@ function createSuggestionsUI() {
     style.textContent = `
         .welcome {
             margin-bottom: 2rem;
-            margin-top: 2rem;
             padding: 2rem 1rem;
         }
         
@@ -398,16 +398,19 @@ function createSuggestionsUI() {
         }
 
         @media screen and (max-width: 600px) {
-            .welcome {
-                margin-bottom: 1rem;
-                margin-top: 1rem;
-                padding: 2rem 1rem;
-            }
             .suggestions-grid {
                 grid-template-columns: 1fr; /* 1 column for small screens */
             }
+
+            .suggestion-card {
+                display: none;
+            }
+
+            .suggestion-card:nth-child(-n+3) {
+                display: block;
+            }
         }
-        
+
         .suggestion-card {
             background: var(--light-secondary-bg);
             border-radius: 12px;
