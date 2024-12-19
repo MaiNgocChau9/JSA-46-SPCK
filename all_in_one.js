@@ -387,7 +387,7 @@ function createSuggestionsUI() {
             display: grid;
             gap: 1rem;
             padding: 0 1rem;
-            margin-bottom: 2rem;
+            margin-bottom: 100px;
             grid-template-columns: repeat(2, 1fr); /* Default to 2 columns */
         }
 
