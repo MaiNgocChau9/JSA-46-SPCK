@@ -1,77 +1,53 @@
-const fetch = require('node-fetch'); // Thư viện gửi yêu cầu HTTP
-const cheerio = require('cheerio'); // Phân tích HTML, cần cài: npm install cheerio
-
-// Hàm tìm kiếm DuckDuckGo
-async function duckDuckGoSearch(query, numResults = 10) {
-    const url = `https://duckduckgo.com/html/?q=${encodeURIComponent(query)}`;
-    
-    try {
-        const response = await fetch(url);
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        
-        const html = await response.text();
-        const $ = cheerio.load(html);
-        const results = [];
-
-        // Lọc ra các liên kết từ kết quả tìm kiếm
-        $('a.result__a').each((index, element) => {
-            if (index < numResults) {
-                const title = $(element).text();
-                const link = $(element).attr('href');
-                results.push({ title, link });
-            }
-        });
-
-        return results.length > 0 ? results : [];
-    } catch (error) {
-        console.error("Lỗi khi tìm kiếm:", error);
-        return [];
-    }
+import puppeteer from 'puppeteer';
+import { GoogleGenerativeAI } from "@google/generative-ai";
+const genAI = new GoogleGenerativeAI("AIzaSyA6nRUwDozn7hYsRbqGXAtWwm1QU09Umwk");  
+const check_model = genAI.getGenerativeModel({model: "gemini-1.5-flash-8b"});
+const check_generationConfig = {temperature: 1,topP: 1,topK: 1,maxOutputTokens: 5,responseMimeType: "text/plain",};
+  
+async function check(question) {
+    const chatSession = check_model.startChat({check_generationConfig, history: [],});
+    const result = await chatSession.sendMessage(`Trả lời \"true\" nếu câu hỏi phức tạp cần tìm kiếm (ví dụ: Giới thiệu cho tôi về trò chơi dân gian nào đó,  lịch sử trò chơi dân gian, nguồn gốc trò chơi dân gian nào đó,...).  Trả lời \"false\" nếu đơn giản (\"Xin chào\", \"Bạn là ai?\", \"Bạn có thể làm gì?\",...). Luôn ưu tiên/khuyến khích tìm kiếm cho thông tin trò chơi dân gian.  Câu hỏi: \"${question}\"`);
+    return result.response.text().trim() == "true";
 }
 
-// Hàm tải nội dung trang web
-async function fetchPageContent(url) {
-    try {
-        const response = await fetch(url);
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        
-        const html = await response.text();
-        const $ = cheerio.load(html);
+async function scrapeGoogle(query) {
+  const browser = await puppeteer.launch({headless:true, args:['--no-sandbox','--disable-setuid-sandbox','--disable-dev-shm-usage','--disable-accelerated-2d-canvas','--disable-gpu','--window-size=1920x1080']});
+  const page = await browser.newPage();
+  await page.setCacheEnabled(false);
+  await page.setDefaultNavigationTimeout(500);
+  page.on('request', req => ['image', 'stylesheet', 'font', 'script'].includes(req.resourceType()) ? req.abort() : req.continue());
+  page.setRequestInterception(true);
 
-        // Trích xuất nội dung chính từ trang web
-        const content = $('body').text().replace(/\s+/g, ' ').trim();
-        return content.length > 300 ? content.slice(0, 300) + "..." : content;
-    } catch (error) {
-        console.error(`Lỗi khi tải nội dung từ ${url}:`, error);
-        return "Không thể tải nội dung.";
-    }
+  try {
+    await page.goto(`https://www.google.com/search?q=${encodeURIComponent(query)}&num=5`, {waitUntil: 'domcontentloaded', timeout: 10000});
+    const results = await page.$$eval('div.tF2Cxc', elements => elements.map(el => ({title: el.querySelector('h3')?.innerText || '', link: el.querySelector('a')?.href || ''})));
+    await page.close();
+
+    const detailedResults = await Promise.all(results.map(async ({title, link}) => {
+      try {
+        const p = await browser.newPage();
+        p.on('request', req => ['image', 'stylesheet', 'font', 'script'].includes(req.resourceType()) ? req.abort() : req.continue());
+        p.setRequestInterception(true);
+        await p.goto(link, {waitUntil: 'domcontentloaded', timeout: 500});
+        const content = await p.evaluate(() => document.querySelector('article')?.innerText || document.querySelector('main')?.innerText || document.querySelector('body')?.innerText || '');
+        await p.close();
+        return {title, link, content: content.trim()};
+      } catch (error) {return {title, link, content: ''};}
+    }));
+
+    return detailedResults.filter(r => r.content).map((item, index) => `### ${index + 1}. [${item.title}](${item.link})\n\nContent: \"\"\"${item.content}\"\"\"\n\n---\n`).join('\n');
+
+  } finally {await browser.close();}
 }
 
-// Hàm chính để tìm kiếm và xử lý nội dung
-async function main(query) {
-    console.log(`Đang tìm kiếm: "${query}"...`);
-    const searchResults = await duckDuckGoSearch(query, 10);
-
-    if (searchResults.length === 0) {
-        console.log("Không tìm thấy kết quả phù hợp.");
-        return;
-    }
-
-    console.log("\nKết quả tìm kiếm:");
-    for (const [index, result] of searchResults.entries()) {
-        console.log(`${index + 1}. ${result.title}`);
-        console.log(`   Link: ${result.link}`);
-        
-        // Lấy nội dung từ trang web
-        const content = await fetchPageContent(result.link);
-        console.log(`   Nội dung: ${content}`);
-        console.log('------------------------------');
-    }
+async function processQuestion(question) {
+  const needsSearch = await check(question);
+  console.log(needsSearch);
+  if (needsSearch) {
+    return `# Đây là kết quả tìm kiếm từ web mà bạn sẽ cần tham khảo:\n\n\`\`\`${await scrapeGoogle(question)}\`\`\``;
+  } else {
+    return "";
+  }
 }
-
-// Gọi hàm chính với từ khóa tìm kiếm
-main("JavaScript tutorials");
+let response = await processQuestion("Trò chơi thả đỉa ba ba");
+console.log(response);

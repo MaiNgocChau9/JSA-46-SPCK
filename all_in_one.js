@@ -1,4 +1,4 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenerativeAI,HarmCategory, HarmBlockThreshold } from "@google/generative-ai";
 
 const apiKey = "AIzaSyA6nRUwDozn7hYsRbqGXAtWwm1QU09Umwk";
 const genAI = new GoogleGenerativeAI(apiKey);
@@ -44,14 +44,14 @@ const generationConfig = {
     topP: 0.9,
     topK: 10,
     maxOutputTokens: 8192,
-    responseMimeType: "text/plain",
 };
 
 async function initChat() {
-    chatSession = await model.startChat({
+    chatSession = model.startChat({
         generationConfig,
         history: chatHistory,
     });
+    return chatSession;
 }
 
 function addMessage(content, isUser = false, imageBase64 = null) {
@@ -62,22 +62,16 @@ function addMessage(content, isUser = false, imageBase64 = null) {
         messageContainer.classList.add('user');
     }
 
-    if (!isUser) {
-        const avatar = document.createElement('img');
-        avatar.src = 'https://api.dicebear.com/7.x/bottts/svg?seed=gemini';
-        avatar.className = 'avatar';
-        messageContainer.appendChild(avatar);
-    } else {
-        const avatar = document.createElement('img');
-        avatar.src = 'https://images.unsplash.com/photo-1618397746666-63405ce5d015?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
-        avatar.className = 'avatar';
-        messageContainer.appendChild(avatar);
-    }
+    // Add avatar
+    const avatar = document.createElement('img');
+    avatar.src = isUser ? 'https://images.unsplash.com/photo-1618397746666-63405ce5d015?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' : 'https://api.dicebear.com/7.x/bottts/svg?seed=gemini';
+    avatar.className = 'avatar';
+    messageContainer.appendChild(avatar);
 
     const messageDiv = document.createElement('div');
     messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
     
-    // Nếu có hình ảnh, thêm hình ảnh vào tin nhắn
+    // Add image if present
     if (imageBase64) {
         const imageElement = document.createElement('img');
         imageElement.src = `data:image/jpeg;base64,${imageBase64}`;
@@ -85,73 +79,103 @@ function addMessage(content, isUser = false, imageBase64 = null) {
         messageDiv.appendChild(imageElement);
     }
 
-    // Thêm nội dung văn bản
+    // Add text content div that will be used for streaming
     const textElement = document.createElement('div');
-    textElement.innerHTML = marked.parse(content);
+    textElement.className = 'message-text';
+    if (content) {
+        textElement.innerHTML = marked.parse(content);
+    }
     messageDiv.appendChild(textElement);
 
     messageContainer.appendChild(messageDiv);
     messagesDiv.appendChild(messageContainer);
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    
+    return textElement; // Return the text element for streaming updates
 }
 
 async function processImageAndText(message, imageBase64 = null) {
     try {
-        if (!chatSession) await initChat();
+        if (!chatSession) {
+            await initChat();
+        }
         
-        // Thêm tin nhắn người dùng vào UI, bao gồm cả hình ảnh nếu có
+        // Add user message
         addMessage(message, true, imageBase64);
         
         // Add typing indicator
+        const typingContainer = document.createElement('div');
+        typingContainer.className = 'message-container'
+        typingContainer.className = 'message-typing-area';
+        
+        const typingAvatar = document.createElement('img');
+        typingAvatar.src = 'https://api.dicebear.com/7.x/bottts/svg?seed=gemini';
+        typingAvatar.className = 'avatar';
+        typingContainer.appendChild(typingAvatar);
+        
         const typingDiv = document.createElement('div');
-        typingDiv.className = 'message-container';
+        typingDiv.className = 'typing';
+        typingDiv.innerHTML = '<span class="typing-dots"></span>';
+        typingContainer.appendChild(typingDiv);
+        
+        document.getElementById('messages').appendChild(typingContainer);
+        
+        // Create bot message container
+        const messageContainer = document.createElement('div');
+        messageContainer.className = 'message-container';
+        messageContainer.style.display = 'none'; // Hide initially
+        
         const avatar = document.createElement('img');
         avatar.src = 'https://api.dicebear.com/7.x/bottts/svg?seed=gemini';
         avatar.className = 'avatar';
-        typingDiv.appendChild(avatar);
+        messageContainer.appendChild(avatar);
         
-        const typingContent = document.createElement('div');
-        typingContent.className = 'typing';
-        typingContent.innerHTML = '<span class="typing-dots"></span>';
-        typingDiv.appendChild(typingContent);
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'message bot-message';
         
-        document.getElementById('messages').appendChild(typingDiv);
+        const textElement = document.createElement('div');
+        textElement.className = 'message-text';
+        messageDiv.appendChild(textElement);
+        
+        messageContainer.appendChild(messageDiv);
+        document.getElementById('messages').appendChild(messageContainer);
 
         let result;
-        let response;
+        let responseText = '';
         
         if (imageBase64) {
-            // Nếu có hình ảnh, xử lý cả hình ảnh và văn bản
-            result = await model.generateContent([
+            result = await model.generateContentStream([
                 message || "Tell me about this image (in Vietnamese)",
                 {
                     inlineData: {
                         data: imageBase64,
-                        mimeType: 'image/jpeg', // Điều chỉnh dựa trên loại hình ảnh thực tế
+                        mimeType: 'image/jpeg'
                     },
                 }
             ]);
-            response = result.response.candidates[0].content.parts[0].text;
         } else {
-            // Xử lý văn bản thuần túy
-            result = await chatSession.sendMessage(message);
-            response = result.response.text();
+            result = await chatSession.sendMessageStream(message);
         }
 
-        // Xóa indicator chờ
-        typingDiv.remove();
+        // Remove typing indicator and show message container
+        typingContainer.remove();
+        messageContainer.style.display = '';
 
-        // Thêm phản hồi AI vào UI
-        addMessage(response, false);
+        // Process the stream
+        for await (const chunk of result.stream) {
+            const chunkText = chunk.text();
+            responseText += chunkText;
+            textElement.innerHTML = marked.parse(responseText);
+            document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
+        }
 
-        // Cập nhật lịch sử chat
+        // Update chat history
         chatHistory.push({
             role: 'user',
             parts: [{ text: message }]
         });
         
         if (imageBase64) {
-            // Đối với tương tác dựa trên hình ảnh, thêm một mục lịch sử khác
             chatHistory.push({
                 role: 'user',
                 parts: [
@@ -168,13 +192,13 @@ async function processImageAndText(message, imageBase64 = null) {
 
         chatHistory.push({
             role: 'model',
-            parts: [{ text: response }]
+            parts: [{ text: responseText }]
         });
 
-        // Khởi tạo lại phiên chat với lịch sử đã cập nhật
+        // Reinitialize chat with updated history
         await initChat();
 
-        // Xóa preview hình ảnh và reset nút gửi
+        // Clean up UI
         const imagePreviewContainer = document.querySelector('.image-preview-container');
         if (imagePreviewContainer) {
             imagePreviewContainer.remove();
@@ -184,7 +208,10 @@ async function processImageAndText(message, imageBase64 = null) {
         
     } catch (error) {
         console.error('Error:', error);
-        typingDiv?.remove();
+        const typingContainer = document.querySelector('.message-typing-area');
+        if (typingContainer?.querySelector('.typing')) {
+            typingContainer.remove();
+        }
         addMessage('Xin lỗi, đã có lỗi xảy ra khi xử lý tin nhắn của bạn.', false);
     }
 }
@@ -214,7 +241,7 @@ imageUpload.addEventListener('change', async (e) => {
                 imagePreview.className = 'image-preview';
                 
                 const removeBtn = document.createElement('button');
-                removeBtn.innerHTML = '&times;';
+                removeBtn.innerHTML = '×';
                 removeBtn.className = 'remove-image-btn';
                 removeBtn.addEventListener('click', () => {
                     uploadedImage = null;

@@ -75,6 +75,7 @@ body.dark-mode {
     overflow-y: auto;
     padding: 1.5rem;
     padding-top: 2rem;
+    margin-bottom: 90px;
 }
 
 /* Message Container */
@@ -87,6 +88,13 @@ body.dark-mode {
 
 .message-container.user {
     flex-direction: row-reverse;
+}
+
+.message-typing-area {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    animation: fadeIn 0.3s ease;
 }
 
 /* Avatar */
