@@ -44,7 +44,7 @@ async function processQuestion(question) {
   const needsSearch = await check(question);
   console.log(needsSearch);
   if (needsSearch) {
-    return `# Đây là kết quả tìm kiếm từ web mà bạn sẽ cần tham khảo:\n\n\`\`\`${await scrapeGoogle(question)}\`\`\``;
+    return `# Đây là kết quả tìm kiếm từ web mà bạn sẽ cần tham khảo:\n\n\`\`\`\n${await scrapeGoogle(question)}\n\`\`\``;
   } else {
     return "";
   }
