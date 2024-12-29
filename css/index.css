@@ -204,14 +204,15 @@ body {
   padding: 2rem;
   border-radius: 1rem;
   height: 100%;
-  transition: all 0.3s;
+  transition: all 0.3s !important;
   cursor: pointer;
 }
 
 .category-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-}
+  transform: translateY(-5px);
+  /* box-shadow: 0 15px 30px rgba(255 255 255 / 0.1); */
+  box-shadow: 0 20px 50px 5px color-mix(in srgb, var(--primary), transparent 60%) !important;
+    }
 
 .icon-wrapper {
   width: 4rem;
@@ -685,3 +686,20 @@ body {
   background-color: var(--accent);
   transform: translateY(-2px);
 }
+
+.secondary-button {
+    text-decoration: none;
+    padding: 15px 30px;
+    background-color: var(--primary);
+    transition: transform ease 0.2s, box-shadow ease 0.2s !important;
+    display: inline-block;
+    white-space: nowrap;
+    color: #f7f6f3;
+    border-radius: 10px;
+    text-align: center;
+  }
+  
+  .secondary-button:hover {
+    transform: translate(0, -3px) !important;
+    box-shadow: 0 20px 80px -10px var(--secondary) !important;
+  }
