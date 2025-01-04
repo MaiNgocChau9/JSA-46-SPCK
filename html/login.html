@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập - Game Mood</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root[data-theme="light"] {
+            --text: #0c0b08;
+            --background: #fcfbf8;
+            --primary: #b59c4a;
+            --secondary: #dfce96;
+            --accent: #ddc05f;
+        }
+
+        :root[data-theme="dark"] {
+            --text: #f7f6f3;
+            --background: #070603;
+            --primary: #b59c4a;
+            --secondary: #695820;
+            --accent: #a08222;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        [data-theme="light"] .theme-icon-dark,
+        [data-theme="dark"] .theme-icon-light {
+            display: none;
+        }
+
+        .container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .form-wrapper {
+            background-color: var(--background);
+            padding: 3rem;
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px 30px color-mix(in srgb, var(--secondary), transparent 80%);
+            width: 100%;
+            max-width: 400px;
+            transition: transform 0.3s;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--text);
+            margin-bottom: 2rem;
+            font-size: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary);
+        }
+
+        input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            border: 2px solid var(--secondary);
+            border-radius: 0.5rem;
+            background-color: var(--background);
+            color: var(--text);
+            transition: all 0.3s;
+            box-sizing: border-box;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(181, 156, 74, 0.2);
+        }
+
+        button {
+            width: 100%;
+            padding: 1rem;
+            background-color: var(--primary);
+            color: var(--background);
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: var(--text);
+        }
+
+        .register-link a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .register-link a:hover {
+            color: var(--accent);
+        }
+
+        .home-link {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: color 0.3s;
+        }
+
+        .home-link:hover {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <a href="../index.html" class="home-link">
+        <i class="fas fa-home"></i>
+    </a>
+
+    <div class="container">
+        <div class="form-wrapper">
+            <h1>Đăng Nhập</h1>
+            <form id="loginForm">
+                <div class="form-group">
+                    <div class="input-wrapper">
+                        <i class="fas fa-envelope input-icon"></i>
+                        <input type="email" id="email" placeholder="Email" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock input-icon"></i>
+                        <input type="password" id="password" placeholder="Mật khẩu" required>
+                    </div>
+                </div>
+                <button type="submit">Đăng nhập</button>
+            </form>
+            <div class="register-link">
+                Chưa có tài khoản? <a href="register.html">Đăng ký</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Theme switcher
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    </script>
+    <script src="../js/login.js"></script>
+</body>
+</html>

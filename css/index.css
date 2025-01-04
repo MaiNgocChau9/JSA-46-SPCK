@@ -703,3 +703,13 @@ body {
     transform: translate(0, -3px) !important;
     box-shadow: 0 20px 80px -10px var(--secondary) !important;
   }
+
+.userNameSection{
+  color: var(--primary);
+  border: 1px solid var(--accent);
+}
+
+.userNameSection:hover{
+  color: var(--primary);
+  border: 1px solid var(--accent);
+}
