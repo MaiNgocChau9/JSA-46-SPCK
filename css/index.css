@@ -210,7 +210,6 @@ body {
 
 .category-card:hover {
   transform: translateY(-5px);
-  /* box-shadow: 0 15px 30px rgba(255 255 255 / 0.1); */
   box-shadow: 0 20px 50px 5px color-mix(in srgb, var(--primary), transparent 60%) !important;
     }
 
@@ -446,6 +445,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  text-decoration: none;
   transition: all 0.3s;
 }
 
@@ -706,10 +706,17 @@ body {
 
 .userNameSection{
   color: var(--primary);
-  border: 1px solid var(--accent);
+  border: 1px solid var(--accent); 
 }
 
 .userNameSection:hover{
-  color: var(--primary);
-  border: 1px solid var(--accent);
+  color: red;
+  border: 1px solid orangered;
+}
+
+@media screen and (max-width: 992px) {
+  .userNameSection{
+    color: red;
+    border: 1px solid orangered;
+  } 
 }

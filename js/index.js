@@ -76,12 +76,39 @@ const userNameSection = document.querySelector(".userNameSection");
 const login_register = document.querySelector(".login_register");
 const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
-if (currentUser) {
-    userNameSection.textContent = currentUser.name;
-    userNameSection.classList.remove("d-none"); // Sử dụng class của Bootstrap
-    login_register.classList.add("d-none");     // Thay vì dùng style.display
-} else {
+if (currentUser && window.innerWidth < 991){
+    userNameSection.textContent = "Đăng xuất";
+    userNameSection.classList.remove("d-none");
+    login_register.classList.add("d-none");
+}
+// Here
+else if (currentUser) {
+    userNameSection.textContent = `✦ ${currentUser.name} ✦`;
+    userNameSection.classList.remove("d-none");
+    login_register.classList.add("d-none");
+}
+
+else {
     userNameSection.textContent = "";
     userNameSection.classList.add("d-none");
     login_register.classList.remove("d-none");
 }
+
+userNameSection.addEventListener("click", () => {
+    if (confirm('Bạn có chắc chắn muốn đăng xuất?')) {
+        localStorage.removeItem("currentUser");
+        window.location.href = "/";
+    }
+});
+
+userNameSection.addEventListener('mouseover', () => {
+    userNameSection.textContent = 'Đăng xuất';
+});
+
+userNameSection.addEventListener('mouseout', () => {
+    if (currentUser && window.innerWidth > 992) {
+        userNameSection.textContent = `✦ ${currentUser.name} ✦`;
+    } else if(currentUser) {
+        userNameSection.textContent = "Đăng xuất";
+    }
+});

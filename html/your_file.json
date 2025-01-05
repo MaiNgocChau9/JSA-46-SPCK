@@ -1,0 +1,61 @@
+{
+  "title": "Minecraft",
+  "image": "https://upload.wikimedia.org/wikipedia/vi/thumb/1/14/Minecraft_Logo.svg/1200px-Minecraft_Logo.svg.png",
+  "genres": ["Sandbox", "Sinh tồn", "Thế giới mở", "Phiêu lưu", "Xây dựng"],
+  "description": "Minecraft là một trò chơi thế giới mở sandbox cho phép người chơi tự do khám phá, chế tạo và xây dựng trong một thế giới được tạo ngẫu nhiên. Không có mục tiêu cụ thể nào được đặt ra, người chơi có thể tự quyết định cách họ muốn trải nghiệm trò chơi.\nNgười chơi có thể khai thác tài nguyên từ môi trường, chế tạo các công cụ, vũ khí và đồ dùng, xây dựng nhà cửa, trang trại hoặc thậm chí cả các thành phố lớn. Các loại quái vật khác nhau sẽ xuất hiện vào ban đêm, buộc người chơi phải chiến đấu hoặc tìm nơi ẩn nấp. Ngoài ra, người chơi có thể khám phá các hang động, ngục tối và các quần xã sinh vật khác nhau để tìm kiếm tài nguyên quý hiếm và khám phá những bí mật ẩn chứa.\nChế độ chơi đa người cho phép người chơi cùng nhau xây dựng, khám phá và chiến đấu. Có rất nhiều server và cộng đồng để người chơi tham gia.\nMinecraft không có cốt truyện chính thức, nhưng người chơi có thể tạo ra câu chuyện của riêng mình thông qua các hoạt động và sự sáng tạo của mình. Trò chơi khuyến khích sự khám phá, sáng tạo và tư duy logic.",
+  "features": [
+    {
+      "icon": "bi bi-globe icon",
+      "info": "Thế giới mở vô tận được tạo ngẫu nhiên"
+    },
+    {
+      "icon": "bi bi-hammer icon",
+      "info": "Chế tạo và xây dựng tự do"
+    },
+    {
+      "icon": "bi bi-house icon",
+        "info": "Xây dựng các công trình từ đơn giản đến phức tạp"
+    },
+    {
+       "icon": "bi bi-gem icon",
+       "info": "Khai thác và chế tạo tài nguyên phong phú"
+    },
+    {
+       "icon": "bi bi-person-fill icon",
+       "info": "Chơi đơn hoặc nhiều người trực tuyến"
+    },
+    {
+      "icon": "bi bi-controller icon",
+      "info": "Nhiều chế độ chơi: Sinh tồn, Sáng tạo, Phiêu lưu"
+    }
+  ],
+  "system_requirements": [
+    {
+      "icon": "bi bi-windows",
+      "name": "Hệ điều hành",
+      "value": "Windows 7/8/10/11 64-bit"
+    },
+      {
+        "icon": "bi bi-cpu",
+        "name": "CPU",
+        "value": "Intel Core i3-3210 / AMD A8-7600 APU or equivalent"
+      },
+      {
+        "icon": "bi bi-memory",
+        "name": "RAM",
+        "value": "4 GB"
+      },
+    {
+      "icon": "bi bi-gpu-card",
+      "name": "Card đồ họa",
+      "value": "NVIDIA GeForce 400 Series / AMD Radeon HD 7000 Series OpenGL 4.4"
+    },
+     {
+        "icon":"bi bi-hdd",
+        "name": "Ổ cứng",
+        "value": "1 GB"
+     }
+
+  ],
+  "similar_games": ["Terraria", "Roblox", "Starbound", "Don't Starve"]
+}
