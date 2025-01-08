@@ -10,6 +10,17 @@ const generationConfig = {
   maxOutputTokens: 8192,
 };
 
+// Hàm điều khiển loading screen
+function showLoading() {
+  const loadingScreen = document.getElementById('loading-screen');
+  loadingScreen.classList.add('active');
+}
+
+function hideLoading() {
+  const loadingScreen = document.getElementById('loading-screen');
+  loadingScreen.classList.remove('active');
+}
+
 async function getGameData(userInput) {
   const prompt = `
 Yêu cầu người dùng: \"${userInput}\".
@@ -49,23 +60,6 @@ Lưu ý: Hãy chọn một game phổ biến và cung cấp thông tin chính x�
     console.error("Lỗi khi phân tích JSON:", text, error);
     return null;
   }
-}
-
-const searchValue = localStorage.getItem("searchValue");
-if (searchValue) {
-  getGameData(searchValue)
-    .then((data) => {
-      if (data) {
-        updateUI(data);
-      } else {
-        console.error("Không thể lấy dữ liệu game.");
-      }
-    })
-    .catch((error) => {
-      console.error("Lỗi khi gọi API hoặc xử lý dữ liệu:", error);
-    });
-} else {
-  console.warn("Không tìm thấy từ khóa tìm kiếm trong localStorage.");
 }
 
 function updateUI(data) {
@@ -125,7 +119,7 @@ function updateUI(data) {
   }
 
   const similarGamesContainer = document.querySelector(".similar-games");
-  if (similarGamesContainer && data.similar_games) {
+  if (similarGamesContainer && data.similar_games && data.similar_games.length > 0) {
     similarGamesContainer.innerHTML = "";
     data.similar_games.forEach((gameName) => {
       const gameDiv = document.createElement("div");
@@ -138,3 +132,31 @@ function updateUI(data) {
     });
   }
 }
+
+// Khởi tạo ứng dụng
+async function initializeApp() {
+  const searchValue = localStorage.getItem("searchValue");
+  if (searchValue) {
+    try {
+      showLoading();
+      const data = await getGameData(searchValue);
+      if (data) {
+        updateUI(data);
+      } else {
+        console.error("Không thể lấy dữ liệu game.");
+        // Có thể thêm thông báo lỗi cho người dùng ở đây
+      }
+    } catch (error) {
+      console.error("Lỗi khi gọi API hoặc xử lý dữ liệu:", error);
+      // Có thể thêm thông báo lỗi cho người dùng ở đây
+    } finally {
+      hideLoading();
+    }
+  } else {
+    console.warn("Không tìm thấy từ khóa tìm kiếm trong localStorage.");
+    // Có thể thêm xử lý chuyển hướng hoặc thông báo cho người dùng
+  }
+}
+
+// Khởi chạy ứng dụng
+document.addEventListener('DOMContentLoaded', initializeApp);
