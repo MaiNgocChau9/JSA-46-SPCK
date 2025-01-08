@@ -1,61 +1,21 @@
 {
   "title": "Minecraft",
-  "image": "https://upload.wikimedia.org/wikipedia/vi/thumb/1/14/Minecraft_Logo.svg/1200px-Minecraft_Logo.svg.png",
-  "genres": ["Sandbox", "Sinh tồn", "Thế giới mở", "Phiêu lưu", "Xây dựng"],
-  "description": "Minecraft là một trò chơi thế giới mở sandbox cho phép người chơi tự do khám phá, chế tạo và xây dựng trong một thế giới được tạo ngẫu nhiên. Không có mục tiêu cụ thể nào được đặt ra, người chơi có thể tự quyết định cách họ muốn trải nghiệm trò chơi.\nNgười chơi có thể khai thác tài nguyên từ môi trường, chế tạo các công cụ, vũ khí và đồ dùng, xây dựng nhà cửa, trang trại hoặc thậm chí cả các thành phố lớn. Các loại quái vật khác nhau sẽ xuất hiện vào ban đêm, buộc người chơi phải chiến đấu hoặc tìm nơi ẩn nấp. Ngoài ra, người chơi có thể khám phá các hang động, ngục tối và các quần xã sinh vật khác nhau để tìm kiếm tài nguyên quý hiếm và khám phá những bí mật ẩn chứa.\nChế độ chơi đa người cho phép người chơi cùng nhau xây dựng, khám phá và chiến đấu. Có rất nhiều server và cộng đồng để người chơi tham gia.\nMinecraft không có cốt truyện chính thức, nhưng người chơi có thể tạo ra câu chuyện của riêng mình thông qua các hoạt động và sự sáng tạo của mình. Trò chơi khuyến khích sự khám phá, sáng tạo và tư duy logic.",
+  "image": "https://www.digitallydownloaded.net/wp-content/uploads/2023/05/Mirthwood-key-art.jpg",
+  "genres": ["Phiêu lưu", "Sandbox", "Xây dựng", "Thế giới mở", "Sinh tồn"],
+  "description": "Minecraft là một trò chơi điện tử thế giới mở nổi tiếng, cho phép người chơi tự do khám phá, xây dựng và sinh tồn trong một thế giới được tạo ra bằng các khối lập phương. \nKhông có cốt truyện chính thức, mục tiêu của người chơi hoàn toàn phụ thuộc vào sở thích cá nhân. Bạn có thể lựa chọn chế độ sinh tồn, nơi bạn phải thu thập tài nguyên, xây dựng nơi trú ẩn, chế tạo vũ khí và chiến đấu chống lại đám đông quái vật để sống sót. \nHoặc bạn có thể lựa chọn chế độ sáng tạo, nơi bạn có quyền truy cập vào mọi tài nguyên và có thể xây dựng bất cứ thứ gì bạn muốn mà không cần lo lắng về sự sống còn.  \nThế giới trong Minecraft vô cùng rộng lớn và được tạo ra một cách thủ tục, điều đó có nghĩa là mỗi thế giới đều độc đáo và khác biệt. Bạn có thể khám phá những hang động bí ẩn, những vùng núi cao chót vót, những đại dương mênh mông, những sa mạc khô cằn và nhiều địa hình khác nhau. \nMinecraft còn nổi bật với hệ thống chế tạo đa dạng, cho phép người chơi tạo ra vô số vật phẩm, công cụ, vũ khí và nhiều thứ khác từ những nguyên liệu thu thập được. \nTính cộng đồng mạnh mẽ cũng là một điểm thu hút lớn của Minecraft. Người chơi có thể chơi cùng nhau trong chế độ nhiều người chơi, chia sẻ những trải nghiệm, cùng nhau xây dựng những công trình đồ sộ hoặc tham gia vào những cuộc phiêu lưu đầy thử thách.\nNgoài ra, Minecraft còn có một cộng đồng mod khổng lồ, cho phép người chơi mở rộng trò chơi với vô số tính năng và nội dung mới, từ những thế giới mới đến những vật phẩm và cơ chế gameplay độc đáo.",
   "features": [
-    {
-      "icon": "bi bi-globe icon",
-      "info": "Thế giới mở vô tận được tạo ngẫu nhiên"
-    },
-    {
-      "icon": "bi bi-hammer icon",
-      "info": "Chế tạo và xây dựng tự do"
-    },
-    {
-      "icon": "bi bi-house icon",
-        "info": "Xây dựng các công trình từ đơn giản đến phức tạp"
-    },
-    {
-       "icon": "bi bi-gem icon",
-       "info": "Khai thác và chế tạo tài nguyên phong phú"
-    },
-    {
-       "icon": "bi bi-person-fill icon",
-       "info": "Chơi đơn hoặc nhiều người trực tuyến"
-    },
-    {
-      "icon": "bi bi-controller icon",
-      "info": "Nhiều chế độ chơi: Sinh tồn, Sáng tạo, Phiêu lưu"
-    }
+    {"icon": "bi bi-globe", "info": "Thế giới mở rộng lớn, được tạo ra thủ tục"},
+    {"icon": "bi bi-hammer", "info": "Hệ thống chế tạo đa dạng và phong phú"},
+    {"icon": "bi bi-house-door", "info": "Xây dựng và tùy chỉnh nhà cửa, công trình"},
+    {"icon": "bi bi-people", "info": "Chế độ chơi đơn và nhiều người chơi"},
+    {"icon": "bi bi-controller", "info": "Gameplay linh hoạt, tùy thuộc vào sự sáng tạo của người chơi"},
+    {"icon": "bi bi-code-slash", "info": "Cộng đồng mod đồ sộ, mở rộng khả năng chơi game"}
   ],
   "system_requirements": [
-    {
-      "icon": "bi bi-windows",
-      "name": "Hệ điều hành",
-      "value": "Windows 7/8/10/11 64-bit"
-    },
-      {
-        "icon": "bi bi-cpu",
-        "name": "CPU",
-        "value": "Intel Core i3-3210 / AMD A8-7600 APU or equivalent"
-      },
-      {
-        "icon": "bi bi-memory",
-        "name": "RAM",
-        "value": "4 GB"
-      },
-    {
-      "icon": "bi bi-gpu-card",
-      "name": "Card đồ họa",
-      "value": "NVIDIA GeForce 400 Series / AMD Radeon HD 7000 Series OpenGL 4.4"
-    },
-     {
-        "icon":"bi bi-hdd",
-        "name": "Ổ cứng",
-        "value": "1 GB"
-     }
-
+    {"icon": "bi bi-windows", "name": "Hệ điều hành", "value": "Windows 7 trở lên, macOS, Linux"},
+    {"icon": "bi bi-memory", "name": "RAM", "value": "2GB"},
+    {"icon": "bi bi-cpu", "name": "Bộ xử lý", "value": "1.8 GHz trở lên"},
+    {"icon": "bi bi-hdd-stack", "name": "Ổ cứng", "value": "khoảng 1GB dung lượng trống"}
   ],
-  "similar_games": ["Terraria", "Roblox", "Starbound", "Don't Starve"]
+  "similar_games": ["Terraria", "Roblox", "Wurm Online"]
 }

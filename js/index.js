@@ -112,3 +112,19 @@ userNameSection.addEventListener('mouseout', () => {
         userNameSection.textContent = "Đăng xuất";
     }
 });
+
+let searchButton = document.getElementsByClassName("search-btn");
+let searchInput = document.getElementsByClassName("search-input");
+
+searchButton[0].addEventListener("click", () => {
+    if (searchInput[0].value) {
+        localStorage.setItem("searchValue", searchInput[0].value);
+        window.location.href = "./html/process.html";
+    }
+});
+
+let exploreButton = document.getElementsByClassName("explore-btn");
+exploreButton[0].addEventListener("click", () => {
+    localStorage.setItem("searchValue", "Giới thiệu cho tôi những tựa game bom tấn vừa ra mắt và sắp phát hành");
+    window.location.href = "./html/process.html";
+});
