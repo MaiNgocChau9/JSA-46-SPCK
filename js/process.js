@@ -30,14 +30,18 @@ Tạo ra một đoạn văn bản JSON chứa thông tin về một tựa game t
 * **image (ảnh):** https://www.digitallydownloaded.net/wp-content/uploads/2023/05/Mirthwood-key-art.jpg
 * **genres (thể loại):**  Mảng các thể loại game (ví dụ: ["RPG", "Phiêu Lưu", "Hành động", "Thế giới mở"]).
 * **description (phần mô tả, giới thiệu):** Mô tả chi tiết nhất có thể, hấp dẫn về game (bằng tiếng Việt), nhấn mạnh vào các điểm nổi bật và gameplay. Giới thiệu về cốt truyện, mục tiêu của game. Có thể xuống dòng thành nhiều đoạn khác nhau, ghi thật chi tiết, thật dài, dùng \`<br><br>\` để xuống dòng, không xuống nhiều hơn 2 lần ( ví dụ: \`<br><br><br>\`)
-* **features (tính năng):** Một mảng các đối tượng, mỗi đối tượng chứa \`icon\` (biểu tượng font awesome hoặc bootstrap icon -  ví dụ: "bi bi-person-circle icon", "bi bi-book-half icon"), \`info\` (ví dụ: "Thế giới mở rộng lớn", "Hệ thống chiến đấu đa dạng", "Câu chuyện hấp dẫn", "Tùy chỉnh nhân vật" (tính năng mô tả ngắn gọn)).
+* **features (tính năng):** Một mảng các đối tượng, mỗi đối tượng chứa \`icon\` (biểu tượng font awesome free hoặc bootstrap icon -  ví dụ: "bi bi-person-circle icon", "bi bi-book-half icon"), \`info\` (ví dụ: "Thế giới mở rộng lớn", "Hệ thống chiến đấu đa dạng", "Câu chuyện hấp dẫn", "Tùy chỉnh nhân vật" (tính năng mô tả ngắn gọn)).
 * **system_requirements (yêu cầu hệ thống khuyến nghị):**  Một mảng các đối tượng, mỗi đối tượng chứa \`icon\` (biểu tượng font awesome hoặc bootstrap icon -  ví dụ: "bi bi-windows", "bi bi-memory"), \`name\` (tên yêu cầu - ví dụ: "Hệ điều hành") và \`value\` (giá trị yêu cầu - ví dụ: "Windows 10 64-bit").
 * **similar_games (game tương tự):** Mảng tên các game tương tự (bằng tiếng Việt). (Có thể để trống nếu không tìm thấy game tương tự phù hợp)
 
-Lưu ý: Hãy chọn một game phổ biến và cung cấp thông tin chính xác và đầy đủ nhất có thể.`;
+Lưu ý:
+* Hãy chọn một game phổ biến và cung cấp thông tin chính xác và đầy đủ nhất có thể.
+* Nếu không tìm ra icon phù hợp, hãy để icon là: \`fa-solid fa-gamepad\`.
+`;
 
   const model = genAI.getGenerativeModel({
     model: "gemini-1.5-flash",
+    // systemInstruction: "",
     generationConfig,
   });
 

@@ -18,7 +18,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    transition: background-color 0.3s, color 0.3s;
+    transition: var(--background) 0.3s, color 0.3s;
 }
 
 body {
@@ -167,6 +167,11 @@ body {
     border-radius: 6px;
 }
 
+.feature i{
+    color: var(--primary);
+
+}
+
 .similar-games {
     display: flex;
     gap: 1.25rem;
@@ -251,3 +256,155 @@ body {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
   }
+
+  /* Mobile Styles */
+@media screen and (max-width: 768px) {
+    body {
+        flex-direction: column;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    .game-preview {
+        height: 40vh;
+        width: 100%;
+        position: relative;
+    }
+
+    .card {
+        border-radius: 20px 20px 0 0;
+        margin-top: -20px;
+        position: relative;
+        height: auto;
+        min-height: 60vh;
+    }
+
+    .card-content {
+        padding: 1.5rem;
+    }
+
+    .card-title {
+        font-size: 1.75rem;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        padding: 0 1rem;
+    }
+
+    .genre-tags {
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-bottom: 1.5rem;
+        padding: 0 0.5rem;
+    }
+
+    .genre-tag {
+        font-size: 0.8rem;
+        padding: 0.4rem 0.8rem;
+    }
+
+    .section {
+        margin-bottom: 2rem;
+    }
+
+    .section-title {
+        font-size: 1.25rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .description {
+        font-size: 1rem;
+        line-height: 1.5;
+        padding: 0 0.5rem;
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+        padding: 0 0.5rem;
+    }
+
+    .feature {
+        padding: 1rem;
+    }
+
+    .requirements {
+        margin: 0 0.5rem;
+        padding: 1rem;
+    }
+
+    .requirement {
+        font-size: 0.9rem;
+    }
+
+    .similar-games {
+        padding: 0 0.5rem 1rem;
+        gap: 1rem;
+        justify-content: flex-start;
+    }
+
+    .similar-game img {
+        width: 5rem;
+        height: 5rem;
+    }
+
+    .similar-game p {
+        font-size: 0.8rem;
+    }
+
+    /* Custom scrollbar adjustments for mobile */
+    ::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    /* Loading screen adjustments */
+    #loading-screen {
+        padding: 1rem;
+    }
+
+    .spinner {
+        width: 40px;
+        height: 40px;
+        border-width: 3px;
+    }
+
+    .loading-text {
+        font-size: 1rem;
+    }
+
+    /* Theme toggle button adjustment */
+    .theme-toggle {
+        top: 0.5rem;
+        right: 0.5rem;
+        width: 35px;
+        height: 35px;
+    }
+}
+
+/* Small mobile devices */
+@media screen and (max-width: 375px) {
+    .card-title {
+        font-size: 1.5rem;
+    }
+
+    .genre-tag {
+        font-size: 0.75rem;
+        padding: 0.3rem 0.6rem;
+    }
+
+    .description {
+        font-size: 0.9rem;
+    }
+
+    .section-title {
+        font-size: 1.1rem;
+    }
+
+    .feature {
+        font-size: 0.9rem;
+    }
+
+    .similar-game img {
+        width: 4rem;
+        height: 4rem;
+    }
+}

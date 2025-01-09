@@ -128,3 +128,39 @@ exploreButton[0].addEventListener("click", () => {
     localStorage.setItem("searchValue", "Giới thiệu cho tôi những tựa game bom tấn vừa ra mắt và sắp phát hành");
     window.location.href = "./html/process.html";
 });
+
+categoryCards.forEach(card => {
+    card.addEventListener('mouseenter', () => {
+        card.style.transform = 'translateY(-10px)';
+    });
+
+    card.addEventListener('mouseleave', () => {
+        card.style.transform = 'translateY(0)';
+    });
+    
+    // Add click handler for category cards
+    card.addEventListener('click', () => {
+        const categoryTitle = card.querySelector('h3').textContent;
+        let searchQuery = '';
+        
+        switch(categoryTitle) {
+            case 'FPS Games':
+                searchQuery = 'Giới thiệu về các tựa game FPS phổ biến như Valorant, CS2, Call of Duty';
+                break;
+            case 'MOBA Games':
+                searchQuery = 'Giới thiệu về các tựa game MOBA như League of Legends, Dota 2, Mobile Legends';
+                break;
+            case 'Action RPG':
+                searchQuery = 'Giới thiệu về các tựa game nhập vai hành động như Elden Ring, Dark Souls, God of War';
+                break;
+            case 'Racing & Sports':
+                searchQuery = 'Giới thiệu về các tựa game thể thao và đua xe như Forza Horizon, FIFA 24, NBA 2K24';
+                break;
+        }
+        
+        if (searchQuery) {
+            localStorage.setItem('searchValue', searchQuery);
+            window.location.href = './html/process.html';
+        }
+    });
+});
