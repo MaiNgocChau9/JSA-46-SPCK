@@ -408,3 +408,77 @@ body {
         height: 4rem;
     }
 }
+
+.similar-games {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    padding: 0.5rem;
+  }
+  
+  .similar-game-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: linear-gradient(135deg, var(--background), var(--secondary));
+    border-radius: 12px;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  
+  .similar-game-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .similar-game-icon {
+    flex-shrink: 0;
+    width: 45px;
+    height: 45px;
+    background: var(--primary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .similar-game-icon i {
+    font-size: 1.4rem;
+    color: var(--background);
+  }
+  
+  .similar-game-info {
+    flex: 1;
+  }
+  
+  .similar-game-info h4 {
+    font-size: 1.1rem;
+    color: var(--text);
+    margin: 0;
+    line-height: 1.3;
+  }
+  
+  /* Mobile styles */
+  @media screen and (max-width: 768px) {
+    .similar-games {
+      grid-template-columns: 1fr;
+      padding: 0.5rem;
+    }
+  
+    .similar-game-card {
+      padding: 0.875rem;
+    }
+  
+    .similar-game-icon {
+      width: 40px;
+      height: 40px;
+    }
+  
+    .similar-game-icon i {
+      font-size: 1.2rem;
+    }
+  
+    .similar-game-info h4 {
+      font-size: 1rem;
+    }
+  }
