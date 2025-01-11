@@ -117,16 +117,26 @@ let searchButton = document.getElementsByClassName("search-btn");
 let searchInput = document.getElementsByClassName("search-input");
 
 searchButton[0].addEventListener("click", () => {
-    if (searchInput[0].value) {
-        localStorage.setItem("searchValue", searchInput[0].value);
-        window.location.href = "./html/process.html";
+    if (currentUser) {
+        if (searchInput[0].value) {
+            localStorage.setItem("searchValue", searchInput[0].value);
+            window.location.href = "./html/process.html";
+        }
+    } else {
+        alert("Vui lòng đăng nhập để sử dụng tính năng này!");
+        window.location.href = "./html/login.html";
     }
 });
 
 let exploreButton = document.getElementsByClassName("explore-btn");
 exploreButton[0].addEventListener("click", () => {
-    localStorage.setItem("searchValue", "Giới thiệu cho tôi những tựa game bom tấn vừa ra mắt và sắp phát hành");
-    window.location.href = "./html/process.html";
+    if (currentUser) {
+        localStorage.setItem("searchValue", "Giới thiệu cho tôi những tựa game bom tấn vừa ra mắt và sắp phát hành");
+        window.location.href = "./html/process.html";
+    } else {
+        alert("Vui lòng đăng nhập để sử dụng tính năng này!");
+        window.location.href = "./html/login.html";
+    }
 });
 
 categoryCards.forEach(card => {
@@ -159,8 +169,13 @@ categoryCards.forEach(card => {
         }
         
         if (searchQuery) {
-            localStorage.setItem('searchValue', searchQuery);
-            window.location.href = './html/process.html';
+            if (currentUser) {
+                localStorage.setItem('searchValue', searchQuery);
+                window.location.href = './html/process.html';
+            } else {
+                alert('Vui lòng đăng nhập để sử dụng tính năng này!');
+                window.location.href = './html/login.html';
+            }
         }
     });
 });
