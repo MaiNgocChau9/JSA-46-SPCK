@@ -1,106 +1,540 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tìm kiếm tựa game</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="../css/process.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản lý Tài khoản - Game Mood</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        /* Theme Variables */
+        :root {
+            --background: #ffffff;
+            --text: #333333;
+            --primary: #B59C4A;
+            --secondary: #E5E5E5;
+            --accent: #DFCE96;
+             --invert-close: 0;
+        }
+
+        [data-theme="dark"] {
+            --background: #1a1a1a;
+            --text: #ffffff;
+            --primary: #B59C4A;
+            --secondary: #333333;
+            --accent: #DFCE96;
+            --invert-close: 1;
+        }
+
+        /* Apply theme colors */
+        body {
+            background-color: var(--background);
+            color: var(--text);
+            transition: all 0.3s ease;
+        }
+
+        .navbar {
+            background-color: var(--background);
+            border-bottom: 1px solid var(--secondary);
+        }
+
+        .navbar-brand {
+            color: var(--text);
+        }
+
+        /* Account Management Specific Styles */
+        .account-management-main {
+            padding-top: 100px;
+            padding-bottom: 50px;
+            min-height: calc(100vh - 100px);
+        }
+
+        .account-management-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .account-management-header h1 {
+            color: var(--text);
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .header-description {
+            color: var(--text);
+            opacity: 0.7;
+            font-size: 1.1rem;
+        }
+
+        /* Search and Filter Section */
+        .search-filter-section {
+            display: flex;
+           /* gap: 1rem;*/
+            margin-bottom: 2rem;
+             justify-content: center;
+        }
+
+        .search-wrapper {
+            flex: 1;
+            position: relative;
+             max-width: 500px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            padding-right: 3rem;
+            border: 2px solid var(--secondary);
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            background: var(--background);
+            color: var(--text);
+            transition: all 0.3s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(181, 156, 74, 0.2);
+        }
+
+        .search-btn {
+            position: absolute;
+            right: 0.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            color: var(--primary);
+            border: none;
+            padding: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .search-btn:hover {
+            color: var(--accent);
+        }
+
+        .filter-wrapper {
+            width: 200px;
+        }
+
+        .filter-select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--secondary);
+            border-radius: 0.5rem;
+            background: var(--background);
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(181, 156, 74, 0.2);
+        }
+
+        /* Accounts Table */
+        .accounts-table-wrapper {
+            background: var(--background);
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow-x: auto;
+            margin-bottom: 2rem;
+             display: flex;
+            justify-content: center;
+        }
+
+        .accounts-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        .accounts-table th,
+        .accounts-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(181, 157, 75, 0.1);
+        }
+
+        .accounts-table th {
+            background-color: rgba(181, 157, 75, 0.1);
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .accounts-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .role-badge {
+            padding: 0.35rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .role-admin {
+            background-color: rgba(181, 157, 75, 0.2);
+            color: var(--primary);
+        }
+
+        .role-user {
+            background-color: rgba(223, 206, 150, 0.2);
+            color: var(--accent);
+        }
+
+        .role-toggle-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--primary);
+            border-radius: 0.5rem;
+            background: transparent;
+            color: var(--primary);
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .role-toggle-btn:hover {
+            background-color: var(--primary);
+            color: var(--background);
+        }
+
+        /* Modal Styles */
+        .modal-content {
+            background-color: var(--background);
+            color: var(--text);
+        }
+
+        .modal-header {
+            border-bottom: 1px solid var(--secondary);
+        }
+
+        .modal-footer {
+            border-top: 1px solid var(--secondary);
+        }
+
+        .btn-close {
+            filter: invert(var(--invert-close));
+        }
+
+        .role-option {
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border: 2px solid var(--secondary);
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .role-option:hover {
+            border-color: var(--primary);
+            background-color: rgba(181, 157, 75, 0.1);
+        }
+
+        .role-option.selected {
+            border-color: var(--primary);
+            background-color: rgba(181, 157, 75, 0.2);
+        }
+
+        .role-option i {
+            color: var(--primary);
+        }
+
+        .modal-dialog{
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .btn-close {
+            filter: invert(var(--invert-close));
+        }
+
+        [data-theme="dark"] {
+            --invert-close: 1;
+        }
+
+        p{
+            color: var(--text);
+        }
+
+        /* Footer Styles */
+        .footer {
+            background-color: var(--background);
+            border-top: 1px solid var(--secondary);
+            padding: 1rem 0;
+            text-align: center;
+        }
+    </style>
 </head>
-<body>
-    <div class="game-preview">
-        <img src="https://www.digitallydownloaded.net/wp-content/uploads/2023/05/Mirthwood-key-art.jpg" alt="Mirthwood Game Preview">
-    </div>
+<body id="account-management">
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-gamepad brand-icon"></i>
+                Game Mood
+            </a>
+            <div class="theme-toggle-wrapper">
+                <button id="theme-toggle" class="btn btn-theme">
+                    <i class="fas fa-sun theme-icon-light"></i>
+                    <i class="fas fa-moon theme-icon-dark"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
 
-    <div class="card">
-        <div class="card-content">
-            <h1 class="card-title">Mirthwood: Khám Phá Thế Giới RPG Trung Cổ Huyền Bí</h1>
-              <div class="genre-tags">
-                <span class="genre-tag">RPG</span>
-                <span class="genre-tag">Phiêu Lưu</span>
-                <span class="genre-tag">Thế Giới Mở</span>
+    <main class="account-management-main">
+        <div class="container">
+            <div class="account-management-header">
+                <h1>Quản lý Tài khoản</h1>
+                <p class="header-description">Quản lý và thay đổi vai trò người dùng trong hệ thống</p>
             </div>
 
-             <div class="section">
-                <h3 class="section-title">Chào mừng đến với Mirthwood</h3>
-                <p class="description">
-                    Mirthwood mở ra một thế giới giả tưởng trung cổ rộng lớn, nơi bạn sẽ được tự do khám phá, chiến đấu và viết nên câu chuyện của riêng mình. Hãy chuẩn bị cho một cuộc phiêu lưu đầy những bí ẩn, quái vật huyền bí và những quyết định có thể thay đổi số phận của cả một vương quốc.
-                </p>
-             </div>
-            <div class="section">
-                <h3 class="section-title">Hành Trình của Bạn</h3>
-                <p class="description">
-                  Bạn sẽ nhập vai một nhà thám hiểm trẻ tuổi, bị cuốn vào một cuộc xung đột cổ xưa. Trên đường đi, bạn sẽ khám phá những bí mật bị lãng quên, đối đầu với những thế lực đen tối và đưa ra những lựa chọn quan trọng sẽ định hình thế giới xung quanh. Mỗi quyết định của bạn sẽ dẫn đến một kết thúc khác nhau, tạo nên một trải nghiệm độc đáo và không thể đoán trước.
-                </p>
-            </div>
+            <div class="account-management-content">
+                <div class="search-filter-section">
+                    <div class="search-wrapper">
+                        <input type="text" placeholder="Tìm kiếm người dùng..." class="search-input" />
+                        <button class="search-btn">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
 
-             <div class="section">
-                <h3 class="section-title">Tính Năng</h3>
-                <div class="features-grid">
-                    <div class="feature">
-                        <i class="bi bi-compass icon"></i>
-                        <span>Thế giới mở rộng lớn</span>
-                    </div>
-                    <div class="feature">
-                        <i class="bi bi-person-circle icon"></i>
-                        <span>Tùy chỉnh nhân vật</span>
-                    </div>
-                    <div class="feature">
-                        <i class="bi bi-shield-fill-plus icon"></i>
-                        <span>Chiến đấu chiến thuật</span>
-                    </div>
-                    <div class="feature">
-                        <i class="bi bi-book-half icon"></i>
-                        <span>Cốt truyện hấp dẫn</span>
-                    </div>
-                     <div class="feature">
-                        <i class="bi bi-gear-fill icon"></i>
-                        <span>Hệ thống chế tạo</span>
-                    </div>
-                     <div class="feature">
-                         <i class="bi bi-house-fill icon"></i>
-                        <span>Xây dựng trang trại</span>
-                    </div>
+                </div>
+
+                <div class="accounts-table-wrapper">
+                    <table class="accounts-table">
+                        <thead>
+                            <tr>
+                                <th>Tên người dùng</th>
+                                <th>Email</th>
+                                <th>Vai trò</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Table content will be populated by JavaScript -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
+        </div>
+    </main>
 
-            <div class="section">
-                <h3 class="section-title">Yêu Cầu Hệ Thống</h3>
-                <div class="requirements">
-                    <div class="requirement">
-                         <i class="bi bi-windows icon"></i>
-                        <span>Hệ điều hành: Windows 10 64-bit</span>
+    <!-- Role Change Modal -->
+    <div class="modal fade" id="roleModal" tabindex="-1" aria-labelledby="roleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="roleModalLabel">Chọn vai trò mới</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="role-option" data-role="ADMIN">
+                        <i class="fas fa-user-shield fa-lg"></i>
+                        <div>
+                            <h6 class="mb-1">Admin</h6>
+                            <p class="mb-0">Quản lý toàn bộ hệ thống và người dùng</p>
+                        </div>
                     </div>
-                    <div class="requirement">
-                        <i class="bi bi-memory icon"></i>
-                        <span>RAM: 8GB</span>
-                    </div>
-                     <div class="requirement">
-                        <i class="bi bi-gpu-card icon"></i>
-                        <span>Card đồ họa: Tương thích DirectX 11</span>
-                    </div>
-                    <div class="requirement">
-                        <i class="bi bi-device-hdd icon"></i>
-                        <span>Dung lượng lưu trữ: 50GB</span>
+                    <div class="role-option" data-role="USER">
+                        <i class="fas fa-user fa-lg"></i>
+                        <div>
+                            <h6 class="mb-1">User</h6>
+                            <p class="mb-0">Sử dụng các tính năng cơ bản của hệ thống</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-             <div class="section">
-                <h3 class="section-title">Game Tương Tự</h3>
-                <div class="similar-games">
-                    <div class="similar-game"><img src="https://placehold.co/100x100" alt="Dragon Age"><p>Dragon Age</p></div>
-                    <div class="similar-game"><img src="https://placehold.co/100x100" alt="The Witcher"><p>The Witcher</p></div>
-                    <div class="similar-game"><img src="https://placehold.co/100x100" alt="Skyrim"><p>Skyrim</p></div>
-                    <div class="similar-game"><img src="https://placehold.co/100x100" alt="Elden Ring"><p>Elden Ring</p></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-warning" id="saveRoleButton">Lưu thay đổi</button>
                 </div>
             </div>
         </div>
     </div>
 
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p class="copyright">Game Mood | © 2024</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Theme switcher
+        // Theme handling
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+
+        // Load saved theme from localStorage
         const savedTheme = localStorage.getItem('theme') || 'light';
-        document.documentElement.setAttribute('data-theme', savedTheme);
+        body.setAttribute('data-theme', savedTheme);
+        updateThemeIcon(savedTheme);
+
+        // Theme toggle functionality
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+        });
+
+        function updateThemeIcon(theme) {
+            const lightIcon = document.querySelector('.theme-icon-light');
+            const darkIcon = document.querySelector('.theme-icon-dark');
+            
+            if (theme === 'dark') {
+                lightIcon.style.display = 'none';
+                darkIcon.style.display = 'block';
+            } else {
+                lightIcon.style.display = 'block';
+                darkIcon.style.display = 'none';
+            }
+        }
+
+        // User role management
+        const roleModal = new bootstrap.Modal(document.getElementById('roleModal'));
+        let selectedUserEmail = null;
+        const usersData = JSON.parse(localStorage.getItem('users')) || [];
+
+        // Load and display users
+        function displayUsers() {
+            const tableBody = document.querySelector('.accounts-table tbody');
+            const searchInput = document.querySelector('.search-input');
+            
+            let filteredUsers = [...usersData];
+           
+            
+            // Apply search
+            const searchTerm = searchInput.value.toLowerCase();
+            if (searchTerm) {
+                filteredUsers = filteredUsers.filter(user => 
+                    user.name.toLowerCase().includes(searchTerm) ||
+                    user.email.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            // Clear existing rows
+            tableBody.innerHTML = '';
+            
+            // Add filtered users to table
+            filteredUsers.forEach(user => {
+                const row = `
+                    <tr>
+                        <td>
+                            <div class="user-info">
+                                <span>${user.name}</span>
+                            </div>
+                        </td>
+                        <td>${user.email}</td>
+                        <td>
+                            <span class="role-badge role-${user.role.toLowerCase()}">${user.role}</span>
+                        </td>
+                        <td>
+                            <button class="role-toggle-btn" data-email="${user.email}" title="Chuyển đổi vai trò">
+                                <i class="fas fa-exchange-alt"></i>
+                                Chuyển vai trò
+                            </button>
+                        </td>
+                    </tr>
+                `;
+                tableBody.insertAdjacentHTML('beforeend', row);
+            });
+            
+            // Reattach event listeners to new buttons
+            attachRoleToggleListeners();
+        }
+
+        // Handle role options in modal
+        const roleOptions = document.querySelectorAll('.role-option');
+        roleOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                roleOptions.forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+            });
+        });
+
+        // Handle role toggle
+        function attachRoleToggleListeners() {
+            const roleButtons = document.querySelectorAll('.role-toggle-btn');
+            roleButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    selectedUserEmail = this.dataset.email;
+                    const user = usersData.find(u => u.email === selectedUserEmail);
+                    
+                    // Pre-select current role in modal
+                    roleOptions.forEach(option => {
+                        if (option.dataset.role === user.role) {
+                            option.classList.add('selected');
+                        } else {
+                            option.classList.remove('selected');
+                        }
+                    });
+                    
+                    roleModal.show();
+                });
+            });
+        }
+
+        // Handle save role changes
+        document.getElementById('saveRoleButton').addEventListener('click', function() {
+            const selectedRole = document.querySelector('.role-option.selected');
+            if (selectedRole && selectedUserEmail) {
+                const newRole = selectedRole.dataset.role;
+                const userIndex = usersData.findIndex(u => u.email === selectedUserEmail);
+                
+                if (userIndex !== -1) {
+                    // Update role
+                    usersData[userIndex].role = newRole;
+                    
+                    // Update localStorage
+                    localStorage.setItem('users', JSON.stringify(usersData));
+                    
+                    // Update current user if the changed user is logged in
+                    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+                    if (currentUser && currentUser.email === selectedUserEmail) {
+                        localStorage.setItem('currentUser', JSON.stringify(usersData[userIndex]));
+                    }
+                    
+                    // Refresh display and close modal
+                    displayUsers();
+                    roleModal.hide();
+                }
+            }
+        });
+
+        // Search and filter functionality
+        document.querySelector('.search-input').addEventListener('input', displayUsers);
+        
+
+        // Initial display
+        displayUsers();
     </script>
 </body>
 </html>
