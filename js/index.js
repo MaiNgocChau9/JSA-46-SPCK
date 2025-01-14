@@ -181,3 +181,8 @@ categoryCards.forEach(card => {
         }
     });
 });
+
+const admin_manage = document.querySelector(".admin-manage");
+if (currentUser && currentUser.role === "ADMIN") {
+    admin_manage.classList.remove("d-none");
+}

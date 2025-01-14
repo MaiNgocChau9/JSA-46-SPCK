@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản lý Tài khoản - Game Mood</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      /* Theme Variables */
+      :root {
+        --background: #ffffff;
+        --text: #333333;
+        --primary: #b59c4a;
+        --secondary: #e5e5e5;
+        --accent: #dfce96;
+        --invert-close: 0;
+      }
+
+      [data-theme="dark"] {
+        --background: #1a1a1a;
+        --text: #ffffff;
+        --primary: #b59c4a;
+        --secondary: #333333;
+        --accent: #dfce96;
+        --invert-close: 1;
+      }
+
+      /* Apply theme colors */
+      body {
+        background-color: var(--background);
+        color: var(--text);
+        transition: all 0.3s ease;
+        height: fit-content;
+        min-height: 100vh;
+        margin-top: 70px;
+      }
+
+      .navbar {
+        padding: 1rem 0;
+        background-color: var(--background);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s;
+        z-index: 1000;
+      }
+
+      .navbar-brand {
+        color: var(--primary);
+        font-weight: bold;
+        font-size: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: color 0.3s;
+      }
+
+      .navbar-brand:hover {
+        color: var(--accent);
+      }
+
+      .brand-icon {
+        font-size: 1.8rem;
+      }
+
+      .navbar-toggler {
+        border: none;
+        outline: none;
+      }
+
+      .navbar-toggler:focus {
+        box-shadow: none;
+      }
+
+      .navbar-nav .nav-link {
+        color: var(--text);
+        margin: 0 0.5rem;
+        transition: color 0.3s;
+      }
+
+      .navbar-nav .nav-link:hover {
+        color: var(--primary);
+      }
+
+      .navbar-toggler-icon {
+        background-color: transparent;
+        border: none;
+        background-image: url('data:image/svg+xml;charset=UTF8,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30"%3E%3Cpath stroke="black" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"/%3E%3C/svg%3E');
+      }
+
+      [data-theme="dark"] .navbar-toggler-icon {
+        background-image: url('data:image/svg+xml;charset=UTF8,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30"%3E%3Cpath stroke="white" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"/%3E%3C/svg%3E');
+      }
+
+      .btn-theme {
+        background: none;
+        border: none;
+        color: var(--text);
+        font-size: 1.2rem;
+        padding: 0.5rem;
+        cursor: pointer;
+        transition: color 0.3s;
+      }
+
+      .btn-theme:hover {
+        color: var(--primary);
+      }
+
+      .btn-login,
+      .btn-register,
+      .btn-cta,
+      .submit-btn,
+      .secondary-button {
+        transition: all 0.3s;
+      }
+
+      .btn-login,
+      .btn-register {
+        padding: 0.5rem 1rem;
+      }
+
+      .btn-login {
+        color: var(--primary);
+        margin-right: 1rem;
+        border: 1px solid var(--accent);
+      }
+
+      .btn-login:hover {
+        color: var(--accent);
+        transform: translateY(-2px);
+      }
+
+      .btn-register,
+      .btn-cta,
+      .submit-btn,
+      .secondary-button {
+        background-color: var(--primary);
+        color: var(--background);
+      }
+
+      .btn-register:hover,
+      .btn-cta:hover,
+      .submit-btn:hover,
+      .secondary-button:hover {
+        background-color: var(--accent);
+        transform: translateY(-2px);
+      }
+
+      .userNameSection {
+        color: var(--primary);
+        border: 1px solid var(--accent);
+      }
+
+      .userNameSection:hover {
+        color: red;
+        border: 1px solid orangered;
+      }
+      .nav-item {
+        white-space: nowrap;
+      }
+
+      .theme-toggle-wrapper {
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
+      }
+
+      @media screen and (max-width: 991.98px) {
+        .userNameSection {
+          color: red;
+          border: 1px solid orangered;
+        }
+      }
+
+      /* Account Management Specific Styles */
+      .account-management-main {
+        padding-top: 100px;
+        padding-bottom: 50px;
+        min-height: calc(100vh - 100px);
+      }
+
+      .account-management-header {
+        text-align: center;
+        margin-bottom: 3rem;
+      }
+
+      .account-management-header h1 {
+        color: var(--text);
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 1rem;
+      }
+
+      .header-description {
+        color: var(--text);
+        opacity: 0.7;
+        font-size: 1.1rem;
+      }
+
+      /* Search and Filter Section */
+      .search-filter-section {
+        display: flex;
+        /* gap: 1rem;*/
+        margin-bottom: 2rem;
+        justify-content: center;
+      }
+
+      .search-wrapper {
+        flex: 1;
+        position: relative;
+        max-width: 500px;
+      }
+
+      .search-input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        padding-right: 3rem;
+        border: 2px solid var(--secondary);
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        background: var(--background);
+        color: var(--text);
+        transition: all 0.3s;
+      }
+
+      .search-input:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(181, 156, 74, 0.2);
+      }
+
+      .search-btn {
+        position: absolute;
+        right: 0.5rem;
+        top: 50%;
+        transform: translateY(-50%);
+        background: transparent;
+        color: var(--primary);
+        border: none;
+        padding: 0.5rem;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .search-btn:hover {
+        color: var(--accent);
+      }
+
+      .filter-wrapper {
+        width: 200px;
+      }
+
+      .filter-select {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 2px solid var(--secondary);
+        border-radius: 0.5rem;
+        background: var(--background);
+        color: var(--text);
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .filter-select:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(181, 156, 74, 0.2);
+      }
+
+      /* Accounts Table */
+      .accounts-table-wrapper {
+        background: var(--background);
+        border-radius: 1rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        overflow-x: auto;
+        margin-bottom: 2rem;
+        display: flex;
+        justify-content: center;
+        border: 2px solid var(--primary); /* Added border */
+      }
+
+      .accounts-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+      }
+
+      .accounts-table th,
+      .accounts-table td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid rgba(181, 157, 75, 0.1);
+      }
+
+      .accounts-table th {
+        background-color: rgba(181, 157, 75, 0.1);
+        color: var(--text);
+        font-weight: 600;
+      }
+
+      .accounts-table tr:last-child td {
+        border-bottom: none;
+      }
+
+      .user-info {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .user-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      .role-badge {
+        padding: 0.35rem 0.75rem;
+        border-radius: 1rem;
+        font-size: 0.875rem;
+        font-weight: 500;
+      }
+
+      .role-admin {
+        background-color: rgba(181, 157, 75, 0.2);
+        color: var(--primary);
+      }
+
+      .role-user {
+        background-color: rgba(181, 157, 75, 0.2);
+        color: var(--primary);
+      }
+
+      .role-toggle-btn {
+        padding: 0.5rem 1rem;
+        border: 1px solid var(--primary);
+        border-radius: 0.5rem;
+        background: transparent;
+        color: var(--primary);
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .role-toggle-btn:hover {
+        background-color: var(--primary);
+        color: var(--background);
+      }
+
+      /* Modal Styles */
+      .modal-content {
+        background-color: var(--background);
+        color: var(--text);
+      }
+
+      .modal-header {
+        border-bottom: 1px solid var(--secondary);
+      }
+
+      .modal-footer {
+        border-top: 1px solid var(--secondary);
+      }
+
+      .btn-close {
+        filter: invert(var(--invert-close));
+      }
+
+      .role-option {
+        padding: 1rem;
+        margin: 0.5rem 0;
+        border: 2px solid var(--secondary);
+        border-radius: 0.5rem;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .role-option:hover {
+        border-color: var(--primary);
+        background-color: rgba(181, 157, 75, 0.1);
+      }
+
+      .role-option.selected {
+        border-color: var(--primary);
+        background-color: rgba(181, 157, 75, 0.2);
+      }
+
+      .role-option i {
+        color: var(--primary);
+      }
+
+      .modal-dialog {
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .btn-close {
+        filter: invert(var(--invert-close));
+      }
+
+      [data-theme="dark"] {
+        --invert-close: 1;
+      }
+
+      p {
+        color: var(--text);
+      }
+    </style>
+  </head>
+  <body id="account-management">
+    <nav class="navbar navbar-expand-lg fixed-top">
+      <div class="container">
+        <a class="navbar-brand" href="#">
+          <i class="fas fa-gamepad brand-icon"></i>
+          Game Mood
+        </a>
+        <div class="theme-toggle-wrapper">
+          <button id="theme-toggle" class="btn btn-theme">
+            <i class="fas fa-sun theme-icon-light"></i>
+            <i class="fas fa-moon theme-icon-dark"></i>
+          </button>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        </div>
+        <div
+          class="collapse navbar-collapse justify-content-end"
+          id="navbarNav"
+        >
+          <ul class="navbar-nav text-center">
+            <li class="nav-item">
+              <a class="nav-link" href="../index.html#home">Trang chủ</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="../index.html#about">Giới thiệu</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="../index.html#contact">Liên hệ</a>
+            </li>
+            <li class="nav-item d-flex m-auto login_register">
+              <a class="btn btn-login" href="./html/login.html">Đăng nhập</a>
+              <a class="btn btn-register" href="./html/register.html"
+                >Đăng ký</a
+              >
+            </li>
+            <li class="nav-item d-flex m-auto">
+              <a class="btn userNameSection">Đăng xuất</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main class="account-management-main">
+      <div class="container">
+        <div class="account-management-header">
+          <h1>Quản lý Tài khoản</h1>
+          <p class="header-description">
+            Quản lý và thay đổi vai trò người dùng trong hệ thống
+          </p>
+        </div>
+
+        <div class="account-management-content">
+          <div class="search-filter-section">
+            <div class="search-wrapper">
+              <input
+                type="text"
+                placeholder="Tìm kiếm người dùng..."
+                class="search-input"
+              />
+              <button class="search-btn">
+                <i class="fas fa-search"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="accounts-table-wrapper">
+            <table class="accounts-table">
+              <thead>
+                <tr>
+                  <th>Tên người dùng</th>
+                  <th>Email</th>
+                  <th>Vai trò</th>
+                  <th>Thao tác</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Table content will be populated by JavaScript -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Role Change Modal -->
+    <div
+      class="modal fade"
+      id="roleModal"
+      tabindex="-1"
+      aria-labelledby="roleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="roleModalLabel">Chọn vai trò mới</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div class="role-option" data-role="ADMIN">
+              <i class="fas fa-user-shield fa-lg"></i>
+              <div>
+                <h6 class="mb-1">Admin</h6>
+                <p class="mb-0">Quản lý toàn bộ hệ thống và người dùng</p>
+              </div>
+            </div>
+            <div class="role-option" data-role="USER">
+              <i class="fas fa-user fa-lg"></i>
+              <div>
+                <h6 class="mb-1">User</h6>
+                <p class="mb-0">Sử dụng các tính năng cơ bản của hệ thống</p>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Hủy
+            </button>
+            <button type="button" class="btn btn-warning" id="saveRoleButton">
+              Lưu thay đổi
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      // Kiểm tra người dùng có phải admin không, nếu không thì chuyển về trang chủ
+      const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+      if (!currentUser || currentUser.role !== "ADMIN") {
+        window.location.href = "/";
+      }
+
+      // Theme handling
+      const themeToggle = document.getElementById("theme-toggle");
+      const body = document.body;
+
+      // Load saved theme from localStorage
+      const savedTheme = localStorage.getItem("theme") || "light";
+      body.setAttribute("data-theme", savedTheme);
+      updateThemeIcon(savedTheme);
+
+      // Theme toggle functionality
+      themeToggle.addEventListener("click", () => {
+        const currentTheme = body.getAttribute("data-theme");
+        const newTheme = currentTheme === "light" ? "dark" : "light";
+
+        body.setAttribute("data-theme", newTheme);
+        localStorage.setItem("theme", newTheme);
+        updateThemeIcon(newTheme);
+      });
+
+      function updateThemeIcon(theme) {
+        const lightIcon = document.querySelector(".theme-icon-light");
+        const darkIcon = document.querySelector(".theme-icon-dark");
+
+        if (theme === "dark") {
+          lightIcon.style.display = "none";
+          darkIcon.style.display = "block";
+        } else {
+          lightIcon.style.display = "block";
+          darkIcon.style.display = "none";
+        }
+      }
+
+      // User role management
+      const roleModal = new bootstrap.Modal(
+        document.getElementById("roleModal")
+      );
+      let selectedUserEmail = null;
+      const usersData = JSON.parse(localStorage.getItem("users")) || [];
+
+      // Load and display users
+      function displayUsers() {
+        const tableBody = document.querySelector(".accounts-table tbody");
+        const searchInput = document.querySelector(".search-input");
+
+        let filteredUsers = [...usersData];
+
+        // Apply search
+        const searchTerm = searchInput.value.toLowerCase();
+        if (searchTerm) {
+          filteredUsers = filteredUsers.filter(
+            (user) =>
+              user.name.toLowerCase().includes(searchTerm) ||
+              user.email.toLowerCase().includes(searchTerm)
+          );
+        }
+
+        // Clear existing rows
+        tableBody.innerHTML = "";
+
+        // Add filtered users to table
+        filteredUsers.forEach((user) => {
+          const row = `
+                    <tr>
+                        <td>
+                            <div class="user-info">
+                                <span>${user.name}</span>
+                            </div>
+                        </td>
+                        <td>${user.email}</td>
+                        <td>
+                            <span class="role-badge role-${user.role.toLowerCase()}">${
+            user.role
+          }</span>
+                        </td>
+                        <td>
+                            <button class="role-toggle-btn" data-email="${
+                              user.email
+                            }" title="Chuyển đổi vai trò">
+                                <i class="fas fa-exchange-alt"></i>
+                                Chuyển vai trò
+                            </button>
+                        </td>
+                    </tr>
+                `;
+          tableBody.insertAdjacentHTML("beforeend", row);
+        });
+
+        // Reattach event listeners to new buttons
+        attachRoleToggleListeners();
+      }
+
+      // Handle role options in modal
+      const roleOptions = document.querySelectorAll(".role-option");
+      roleOptions.forEach((option) => {
+        option.addEventListener("click", function () {
+          roleOptions.forEach((opt) => opt.classList.remove("selected"));
+          this.classList.add("selected");
+        });
+      });
+
+      // Handle role toggle
+      function attachRoleToggleListeners() {
+        const roleButtons = document.querySelectorAll(".role-toggle-btn");
+        roleButtons.forEach((button) => {
+          button.addEventListener("click", function () {
+            selectedUserEmail = this.dataset.email;
+            const user = usersData.find((u) => u.email === selectedUserEmail);
+
+            // Pre-select current role in modal
+            roleOptions.forEach((option) => {
+              if (option.dataset.role === user.role) {
+                option.classList.add("selected");
+              } else {
+                option.classList.remove("selected");
+              }
+            });
+
+            roleModal.show();
+          });
+        });
+      }
+
+      // Handle save role changes
+      document
+        .getElementById("saveRoleButton")
+        .addEventListener("click", function () {
+          const selectedRole = document.querySelector(".role-option.selected");
+          if (selectedRole && selectedUserEmail) {
+            const newRole = selectedRole.dataset.role;
+            const userIndex = usersData.findIndex(
+              (u) => u.email === selectedUserEmail
+            );
+
+            if (userIndex !== -1) {
+              // Update role
+              usersData[userIndex].role = newRole;
+
+              // Update localStorage
+              localStorage.setItem("users", JSON.stringify(usersData));
+
+              // Update current user if the changed user is logged in
+              const currentUser = JSON.parse(
+                localStorage.getItem("currentUser")
+              );
+              if (currentUser && currentUser.email === selectedUserEmail) {
+                localStorage.setItem(
+                  "currentUser",
+                  JSON.stringify(usersData[userIndex])
+                );
+              }
+
+              // Refresh display and close modal
+              displayUsers();
+              roleModal.hide();
+            }
+          }
+        });
+
+      const userNameSection = document.querySelector(".userNameSection");
+      const login_register = document.querySelector(".login_register");
+
+      if (currentUser && window.innerWidth < 991) {
+        userNameSection.textContent = "Đăng xuất";
+        userNameSection.classList.remove("d-none");
+        login_register.classList.add("d-none");
+      }
+      // Here
+      else if (currentUser) {
+        userNameSection.textContent = `✦ ${currentUser.name} ✦`;
+        userNameSection.classList.remove("d-none");
+        login_register.classList.add("d-none");
+      } else {
+        userNameSection.textContent = "";
+        userNameSection.classList.add("d-none");
+        login_register.classList.remove("d-none");
+      }
+
+      userNameSection.addEventListener("click", () => {
+        if (confirm("Bạn có chắc chắn muốn đăng xuất?")) {
+          localStorage.removeItem("currentUser");
+          window.location.href = "/";
+        }
+      });
+
+      userNameSection.addEventListener("mouseover", () => {
+        userNameSection.textContent = "Đăng xuất";
+      });
+
+      userNameSection.addEventListener("mouseout", () => {
+        if (currentUser && window.innerWidth > 992) {
+          userNameSection.textContent = `✦ ${currentUser.name} ✦`;
+        } else if (currentUser) {
+          userNameSection.textContent = "Đăng xuất";
+        }
+      });
+
+      // Search and filter functionality
+      document
+        .querySelector(".search-input")
+        .addEventListener("input", displayUsers);
+
+      // Initial display
+      displayUsers();
+    </script>
+  </body>
+</html>
