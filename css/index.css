@@ -540,6 +540,108 @@ html {
   margin: 0;
 }
 
+/* Carousel */
+/* About Section */
+.about-section {
+  padding: 6rem 0;
+  background-color: rgba(181, 157, 75, 0.05);
+}
+
+.about-content h2 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  color: var(--text);
+}
+
+.about-content p {
+  font-size: 1.1rem;
+  color: var(--text);
+  opacity: 0.8;
+  margin-bottom: 2rem;
+}
+
+.features {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.feature-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.feature-item i {
+  font-size: 1.5rem;
+  color: var(--primary);
+  background-color: rgba(181, 157, 75, 0.1);
+  padding: 1rem;
+  border-radius: 50%;
+  transition: all 0.3s;
+  aspect-ratio: 1/1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.feature-item:hover i {
+  background-color: var(--primary);
+  color: var(--background);
+  transform: scale(1.1);
+}
+
+.feature-text h4 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--text);
+}
+
+.feature-text p {
+  font-size: 1rem;
+  margin-bottom: 0;
+}
+
+.review-item{
+  background-color: var(--background);
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  text-align: center;
+}
+
+.review-text{
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  opacity: 0.8;
+}
+
+.review-author {
+  font-weight: bold;
+  color: var(--primary);
+}
+
+.carousel-control-next-icon,
+.carousel-control-prev-icon {
+  background-color: var(--primary);
+  width: 20%;
+  position: absolute;
+  bottom: 30px;
+  border-radius: 10px;
+}
+
+@media (max-width: 767.98px) {
+  .about-section {
+    padding: 4rem 0;
+  }
+  
+  .about-content h2 {
+    font-size: 2rem;
+  }
+}
+
 
 /* Responsive Design */
 @media (max-width: 991.98px) {
