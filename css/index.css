@@ -604,6 +604,10 @@ html {
   margin-bottom: 0;
 }
 
+.carousel-inner{
+  min-height: 250px;
+}
+
 .review-item{
   background-color: var(--background);
   padding: 2rem;
