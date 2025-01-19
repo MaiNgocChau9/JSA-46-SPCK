@@ -99,7 +99,7 @@ else {
 userNameSection.addEventListener("click", () => {
     if (confirm('Bạn có chắc chắn muốn đăng xuất?')) {
         localStorage.removeItem("currentUser");
-        window.location.href = "/";
+        window.location.href = "./index.html";
     }
 });
 
